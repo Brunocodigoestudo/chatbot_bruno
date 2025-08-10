@@ -1,0 +1,6 @@
+.venv
+src
+tests
+poetry.lock
+pyproject.toml
+.env
