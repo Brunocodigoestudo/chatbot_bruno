@@ -7,13 +7,16 @@ from langchain.prompts import ChatPromptTemplate
 # Carregar variáveis de ambiente do arquivo .env
 load_dotenv()
 
-# Verificar se a chave da API foi carregada
-if not os.getenv('GROQ_API_KEY'):
-    st.error("❌ Erro: GROQ_API_KEY não encontrada no arquivo .env")
+# Tentar pegar a chave do ambiente local ou dos secrets do Streamlit
+groq_api_key = os.getenv('GROQ_API_KEY') or st.secrets.get('GROQ_API_KEY')
+
+if not groq_api_key:
+    st.error("❌ Erro: GROQ_API_KEY não encontrada. Verifique seu .env (local) ou Secrets (deploy).")
     st.stop()
 
-# Inicializar o modelo de IA
-chat = ChatGroq(model='llama-3.3-70b-versatile')
+# Inicializar o modelo de IA com a chave
+chat = ChatGroq(model='llama-3.3-70b-versatile', api_key=groq_api_key)
+
 
 # Função para obter resposta do bot
 def resposta_do_bot(pergunta):
